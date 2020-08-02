@@ -1,9 +1,9 @@
 package com.mongocrud.api.controllers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import javax.validation.Valid;
 
@@ -34,20 +34,15 @@ public class ClientController {
 	public ResponseEntity<Response<List<Client>>> listAll() {
 		return ResponseEntity.ok(new Response<List<Client>>(this.clientService.listAll()));
 	}
-	
-	@SuppressWarnings("unchecked")
-	@GetMapping(path = "/{id")
+
+	@GetMapping(path = "/{id}")
 	public ResponseEntity<Response<Client>> listById(@PathVariable(name = "id") String id) {
-		return Optional.ofNullable(this.clientService.listById(id))
-			.map(cliente -> ResponseEntity.ok().body(new Response<Client>(cliente.get())))
-			.orElseGet((Supplier<? extends ResponseEntity<Response<Client>>>) ResponseEntity.notFound().build());
+		Optional<Client> client = this.clientService.listById(id);
+		if (client.isEmpty()) {
+			return ResponseEntity.badRequest().body(new Response<Client>(Arrays.asList("Client not found")));
+		}
 		
-//		Optional<Client> client = this.clientService.listById(id);
-//		if (!client.isEmpty()) {
-//			return ResponseEntity.ok(new Response<Client>(client.get()));
-//		}
-//		
-//		return ResponseEntity.notFound().build();
+		return ResponseEntity.ok(new Response<Client>(client.get()));
 	}
 	
 	@PostMapping

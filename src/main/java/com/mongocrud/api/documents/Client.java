@@ -2,6 +2,7 @@ package com.mongocrud.api.documents;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.data.annotation.Id;
@@ -22,7 +23,7 @@ public class Client {
 	@Id
 	private String id;
 	
-	@NotEmpty(message = "Name is empty")
+	@NotNull(message = "Name is empty")
 	private String name;
 	
 	@Email(message = "Invalid email")
@@ -32,8 +33,5 @@ public class Client {
 	@CPF(message = "Invalid CPF")
 	@NotEmpty(message = "CPF is empty")
 	private String cpf;
-
-	public void setId(String id) {
-		this.id = id;
-	}
+	
 }
